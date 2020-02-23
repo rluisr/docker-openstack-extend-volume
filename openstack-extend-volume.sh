@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 readonly HOST_NAME="${HOST_NAME}"
 readonly TARGET_SIZE=${TARGET_SIZE}
@@ -18,9 +18,11 @@ if [ ${current_size} -eq ${TARGET_SIZE} ]; then
 fi
 
 if [ ${server_status} == "ACTIVE" ]; then
-  openstack server stop "${server_id}" --wait
+  openstack server stop "${server_id}"
 fi
 
 cinder --os-volume-api-version 3.50 extend "${volume_id}" ${TARGET_SIZE}
+
+openstack server start "${server_id}" --wait
 
 echo "ok"
