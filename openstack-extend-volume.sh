@@ -23,6 +23,6 @@ fi
 
 cinder --os-volume-api-version 3.50 extend "${volume_id}" ${TARGET_SIZE}
 
-openstack server start "${server_id}" --wait
+openstack server start "${server_id}"
 
 echo "ok"
