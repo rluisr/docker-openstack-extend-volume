@@ -19,6 +19,15 @@ fi
 
 if [ ${server_status} == "ACTIVE" ]; then
   openstack server stop "${server_id}"
+
+  while :
+  do
+    status=$( openstack server show "${server_id}" -f json | jq -r .status )
+
+    if [ ${status} == "SHUTOFF" ]; then
+      break
+    fi
+  done
 fi
 
 cinder --os-volume-api-version 3.50 extend "${volume_id}" ${TARGET_SIZE}
