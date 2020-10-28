@@ -34,4 +34,13 @@ cinder --os-volume-api-version 3.50 extend "${volume_id}" ${TARGET_SIZE}
 
 openstack server start "${server_id}"
 
+while :
+do
+  status=$( openstack server show "${server_id}" -f json | jq -r .status )
+
+  if [ ${status} == "ACTIVE" ]; then
+    break
+  fi
+done
+
 echo "ok"
